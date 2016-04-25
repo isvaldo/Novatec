@@ -23,9 +23,9 @@ def next_launch():
 
 
 
-@app.route('/book/category', methods=['GET'])
-def category():
-    books = scrapy.get_by_category()
+@app.route('/book/category/<id>/<page>', methods=['GET'])
+def category(id, page=0):
+    books = scrapy.get_by_category(id, page)
     json_string = json.dumps(books)
     return json_string
 

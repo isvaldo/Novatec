@@ -3,6 +3,7 @@ from bs4 import BeautifulSoup
 
 
 class Scrapy_novatec:
+
     def __init__(self):
         self.base_url = "https://novatec.com.br/"
         self.url = ""
@@ -45,9 +46,46 @@ class Scrapy_novatec:
 
         return books
 
-    def get_by_category(self):
-        soap_html = self.getSoap(url="https://novatec.com.br/lista.php?id=28")
+    def get_by_category(self, id, page):
+
+        soap_html = self.getSoap(url="https://novatec.com.br/lista.php?id="+id+"&pag="+page)
         books = []
+
+
+        """
+        //@Breno way, tem um pequeno bug duplicando o resultado
+        blocks = soap_html.find_all('td')
+
+        for block in blocks:
+            if not block.find('a'):
+                continue
+            if not 'livros' in block.find('a').attrs['href']:
+                continue
+
+            simple_tags = block.findAll('a')
+
+            #book_image = self.base_url+block.find("img", hspace="6")["src"]
+
+            author = ''.join([a.text for a in simple_tags if 'autores' in a.attrs['href']])
+            book_name = ''.join([a.text for a in simple_tags if 'livros' in a.attrs['href']])
+            brs = block.find_all('br')
+            if brs:
+                year, pages, price = [b.split(':')[1].strip()
+                        for b in brs[1].text.split('\n')
+                        if b.strip() != ''
+                ]
+                book_image = block.find('img').attrs.get('src', '')
+
+                books.append({"image":book_image,
+                              "title": book_name,
+                              "author": author,
+                              "year": year,
+                              "pages": pages,
+                              "price": price
+                              })
+                #print({"autor": author, "name": book_name, "year": year, "pages": pages, "price": price})
+                print(books)
+    """
         for e in soap_html.findAll("tr"):
             try:
                 year_pages_price_not_formatted_text = e.find(
@@ -69,6 +107,4 @@ class Scrapy_novatec:
                 pass
 
         return books
-if __name__ == '__main__':
-    c = Scrapy_novatec()
-    c.get_by_category()
+
