@@ -10,7 +10,7 @@ scrapy = Scrapy_novatec()
 @app.route('/book/launch', methods=['GET'])
 def launch():
     books = scrapy.get_launch_books()
-    json_string = json.dumps([ob.__dict__ for ob in books])
+    json_string = json.dumps(books)
 
     return json_string
 
@@ -18,7 +18,7 @@ def launch():
 @app.route('/book/next_launch', methods=['GET'])
 def next_launch():
     books = scrapy.get_next_launch()
-    json_string = json.dumps([ob.__dict__ for ob in books])
+    json_string = json.dumps(books)
     return json_string
 
 
@@ -31,4 +31,4 @@ def category(id, page=0):
 
 
 if __name__ == '__main__':
-    app.run(debug=True)
+    app.run(debug=True, host='0.0.0.0')
