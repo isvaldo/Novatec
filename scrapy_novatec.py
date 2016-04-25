@@ -1,12 +1,11 @@
 from urllib.request import urlopen
 from bs4 import BeautifulSoup
-from book import Book
 
 
 class Scrapy_novatec:
     def __init__(self):
         self.base_url = "https://novatec.com.br/"
-        self.url =""
+        self.url = ""
         pass
 
     def getSoap(self, url):
@@ -18,15 +17,15 @@ class Scrapy_novatec:
     def get_launch_books(self):
         soap_html = self.getSoap(url=self.base_url)
         soap_match = soap_html.find_all("tr", valign="center")
-        books =[]
+        books = []
         for e in soap_match:
             try:
-                book = Book(name=e.h1.text,
-                            image=self.base_url+e.img['src'],
-                            description=e.h2.text
-                            )
-                books.append(book)
+                books.append({"name": e.h1.text,
+                              "image": self.base_url+e.img['src'],
+                              "description": e.h2.text
+                              })
             except:
+                #shut up
                 pass
         return books
 
@@ -37,10 +36,9 @@ class Scrapy_novatec:
         for block in soap_match:
             for td in block.find_all("td"):
                 try:
-                    book = Book(name=td.img['alt'],
-                                image=self.base_url+td.img['src'],
-                                description="")
-                    books.append(book)
+                    books.append({"name": td.img['alt'],
+                                  "image": self.base_url+td.img['src']
+                                  })
                 except:
                     #shut up
                     pass
