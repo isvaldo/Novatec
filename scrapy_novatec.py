@@ -69,9 +69,9 @@ class Scrapy_novatec:
                 books.append({"image": self.base_url+e.a.find("img", hspace="6")["src"],
                               "title": e.find("font", face="Arial", size="2").a.text,
                               "author": e.find("font", face="Arial", size="2").br.a.text,
-                              "ano": complex_pog[0].split(":")[1],
-                              "paginas": complex_pog[2].split(":")[1],
-                              "preco": complex_pog[4].split(":")[1]
+                              "ano": complex_pog[0].split(":")[1].strip("\t\n\r "),
+                              "paginas": complex_pog[2].split(":")[1].strip("\t\n\r "),
+                              "preco": complex_pog[4].split(":")[1].strip("\t\n\r ")
                               })
             except:
                 pass
