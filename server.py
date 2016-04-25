@@ -7,28 +7,27 @@ app = Flask(__name__)
 
 scrapy = Scrapy_novatec()
 
-@app.route('/book/lancamento', methods=['GET'])
-def lancamento():
-    books = scrapy.getLancamentoBooks()
+@app.route('/book/launch', methods=['GET'])
+def launch():
+    books = scrapy.get_launch_books()
     json_string = json.dumps([ob.__dict__ for ob in books])
 
     return json_string
 
 
-@app.route('/book/proximos', methods=['GET'])
-def proximo():
-    books = scrapy.getEmBreve()
+@app.route('/book/next_launch', methods=['GET'])
+def next_launch():
+    books = scrapy.get_next_launch()
     json_string = json.dumps([ob.__dict__ for ob in books])
     return json_string
 
 
 
-@app.route('/book/categoria', methods=['GET'])
-def categoria():
-    books = scrapy.getByCategory()
+@app.route('/book/category', methods=['GET'])
+def category():
+    books = scrapy.get_by_category()
     json_string = json.dumps(books)
     return json_string
-
 
 
 if __name__ == '__main__':
