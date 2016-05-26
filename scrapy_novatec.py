@@ -48,6 +48,22 @@ class ScrapyNovatec:
 
         return books
 
+    def get_category(self):
+        soap_html = self.get_soap(self.base_url)
+        soap_match = soap_html.find_all("td", align="left")
+        category = []
+        for cat in soap_match:
+            try:
+                id_category = re.search(r'.+id=([0-9]+)', cat.a["href"]).group(1)
+                category.append({"id": id_category,
+                                 "title": cat.text
+                                 })
+            except:
+                # shut up
+                pass
+
+        return category
+
     def get_by_category(self, id, page):
 
         soap_html = self.get_soap(url="https://novatec.com.br/lista.php?id="+id+"&pag="+page)
