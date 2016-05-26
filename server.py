@@ -1,11 +1,11 @@
 #!flask/bin/python
 import json
 from flask import Flask, jsonify
-from scrapy_novatec import Scrapy_novatec
+from scrapy_novatec import ScrapyNovatec
 
 app = Flask(__name__)
 
-scrapy = Scrapy_novatec()
+scrapy = ScrapyNovatec()
 
 
 @app.route('/book/launch', methods=['GET'])

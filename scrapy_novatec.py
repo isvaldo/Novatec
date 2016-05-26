@@ -2,21 +2,21 @@ from urllib.request import urlopen
 from bs4 import BeautifulSoup
 
 
-class Scrapy_novatec:
+class ScrapyNovatec:
 
     def __init__(self):
         self.base_url = "https://novatec.com.br/"
         self.url = ""
         pass
 
-    def getSoap(self, url):
+    def get_soap(self, url):
         self.url = url
         html = urlopen(url)
         soap_html = BeautifulSoup(html.read(), "html.parser")
         return soap_html
 
     def get_launch_books(self):
-        soap_html = self.getSoap(url=self.base_url)
+        soap_html = self.get_soap(url=self.base_url)
         soap_match = soap_html.find_all("tr", valign="center")
         books = []
         for e in soap_match:
@@ -26,12 +26,12 @@ class Scrapy_novatec:
                               "description": e.h2.text
                               })
             except:
-                #shut up
+                # shut up
                 pass
         return books
 
     def get_next_launch(self):
-        soap_html = self.getSoap(self.base_url)
+        soap_html = self.get_soap(self.base_url)
         soap_match = soap_html.find_all("tr", valign="center", align="center")
         books = []
         for block in soap_match:
@@ -41,14 +41,14 @@ class Scrapy_novatec:
                                   "image": self.base_url+td.img['src']
                                   })
                 except:
-                    #shut up
+                    # shut up
                     pass
 
         return books
 
     def get_by_category(self, id, page):
 
-        soap_html = self.getSoap(url="https://novatec.com.br/lista.php?id="+id+"&pag="+page)
+        soap_html = self.get_soap(url="https://novatec.com.br/lista.php?id="+id+"&pag="+page)
         books = []
 
 
@@ -103,7 +103,7 @@ class Scrapy_novatec:
                               "price": book_price
                               })
             except:
-                #shut up
+                # shut up
                 pass
 
         return books
