@@ -1,5 +1,6 @@
 from urllib.request import urlopen
 from bs4 import BeautifulSoup
+import re
 
 
 class ScrapyNovatec:
@@ -21,8 +22,9 @@ class ScrapyNovatec:
         books = []
         for e in soap_match:
             try:
+                id_image = re.search(r'.+/(.+)\.gif', e.img['src']).group(1)
                 books.append({"name": e.h1.text,
-                              "image": self.base_url+e.img['src'],
+                              "image": self.base_url + e.a['href'] + '/capa_ampliada' + id_image + '.jpg',
                               "description": e.h2.text
                               })
             except:
