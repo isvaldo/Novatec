@@ -7,6 +7,7 @@ app = Flask(__name__)
 
 scrapy = Scrapy_novatec()
 
+
 @app.route('/book/launch', methods=['GET'])
 def launch():
     books = scrapy.get_launch_books()
@@ -20,7 +21,6 @@ def next_launch():
     books = scrapy.get_next_launch()
     json_string = json.dumps(books)
     return json_string
-
 
 
 @app.route('/book/category/<id>/<page>', methods=['GET'])
