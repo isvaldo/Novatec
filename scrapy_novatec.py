@@ -16,15 +16,18 @@ class ScrapyNovatec:
         soap_html = BeautifulSoup(html.read(), "html.parser")
         return soap_html
 
+    def get_full_image(self, source_image, href):
+        id_image = re.search(r'.+/(.+)\.gif', source_image).group(1)
+        return self.base_url + href + '/capa_ampliada' + id_image + '.jpg'
+
     def get_launch_books(self):
         soap_html = self.get_soap(url=self.base_url)
         soap_match = soap_html.find_all("tr", valign="center")
         books = []
         for e in soap_match:
             try:
-                id_image = re.search(r'.+/(.+)\.gif', e.img['src']).group(1)
                 books.append({"name": e.h1.text,
-                              "image": self.base_url + e.a['href'] + '/capa_ampliada' + id_image + '.jpg',
+                              "image": self.get_full_image(e.img['src'], e.a['href']),
                               "description": e.h2.text
                               })
             except:
@@ -113,8 +116,8 @@ class ScrapyNovatec:
                 book_pages = year_pages_price_not_formatted_text[2].split(":")[1].strip("\t\n\r ")
                 book_price = year_pages_price_not_formatted_text[4].split(":")[1].strip("\t\n\r ")
 
-                books.append({"image": self.base_url+e.a.find("img", hspace="6")["src"],
-                              "title": e.find("font", face="Arial", size="2").a.text,
+                books.append({"image": self.get_full_image(e.a.find("img", hspace="6")["src"], e.a['href']),
+                              "name": e.find("font", face="Arial", size="2").a.text,
                               "author": e.find("font", face="Arial", size="2").br.a.text,
                               "year": book_year,
                               "pages": book_pages,
