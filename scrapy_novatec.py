@@ -1,37 +1,42 @@
 from urllib.request import urlopen
 from bs4 import BeautifulSoup
+import re
 
 
-class Scrapy_novatec:
+class ScrapyNovatec:
 
     def __init__(self):
         self.base_url = "https://novatec.com.br/"
         self.url = ""
         pass
 
-    def getSoap(self, url):
+    def get_soap(self, url):
         self.url = url
         html = urlopen(url)
         soap_html = BeautifulSoup(html.read(), "html.parser")
         return soap_html
 
+    def get_full_image(self, source_image, href):
+        id_image = re.search(r'.+/(.+)\.gif', source_image).group(1)
+        return self.base_url + href + '/capa_ampliada' + id_image + '.jpg'
+
     def get_launch_books(self):
-        soap_html = self.getSoap(url=self.base_url)
+        soap_html = self.get_soap(url=self.base_url)
         soap_match = soap_html.find_all("tr", valign="center")
         books = []
         for e in soap_match:
             try:
                 books.append({"name": e.h1.text,
-                              "image": self.base_url+e.img['src'],
+                              "image": self.get_full_image(e.img['src'], e.a['href']),
                               "description": e.h2.text
                               })
             except:
-                #shut up
+                # shut up
                 pass
         return books
 
     def get_next_launch(self):
-        soap_html = self.getSoap(self.base_url)
+        soap_html = self.get_soap(self.base_url)
         soap_match = soap_html.find_all("tr", valign="center", align="center")
         books = []
         for block in soap_match:
@@ -41,14 +46,30 @@ class Scrapy_novatec:
                                   "image": self.base_url+td.img['src']
                                   })
                 except:
-                    #shut up
+                    # shut up
                     pass
 
         return books
 
+    def get_category(self):
+        soap_html = self.get_soap(self.base_url)
+        soap_match = soap_html.find_all("td", align="left")
+        category = []
+        for cat in soap_match:
+            try:
+                id_category = re.search(r'.+id=([0-9]+)', cat.a["href"]).group(1)
+                category.append({"id": id_category,
+                                 "title": cat.text
+                                 })
+            except:
+                # shut up
+                pass
+
+        return category
+
     def get_by_category(self, id, page):
 
-        soap_html = self.getSoap(url="https://novatec.com.br/lista.php?id="+id+"&pag="+page)
+        soap_html = self.get_soap(url="https://novatec.com.br/lista.php?id="+id+"&pag="+page)
         books = []
 
 
@@ -95,15 +116,15 @@ class Scrapy_novatec:
                 book_pages = year_pages_price_not_formatted_text[2].split(":")[1].strip("\t\n\r ")
                 book_price = year_pages_price_not_formatted_text[4].split(":")[1].strip("\t\n\r ")
 
-                books.append({"image": self.base_url+e.a.find("img", hspace="6")["src"],
-                              "title": e.find("font", face="Arial", size="2").a.text,
+                books.append({"image": self.get_full_image(e.a.find("img", hspace="6")["src"], e.a['href']),
+                              "name": e.find("font", face="Arial", size="2").a.text,
                               "author": e.find("font", face="Arial", size="2").br.a.text,
                               "year": book_year,
                               "pages": book_pages,
                               "price": book_price
                               })
             except:
-                #shut up
+                # shut up
                 pass
 
         return books

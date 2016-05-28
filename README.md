@@ -11,8 +11,8 @@ pip install virtualenv
 ## Install packages
 ```
 virtualenv ENV
-source ENV/env/bin/activate
-pip install -r requiriments.txt
+source ENV/bin/activate
+pip install -r requirements.txt
 ```
 
 #Start Server
