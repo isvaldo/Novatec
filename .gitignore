@@ -149,3 +149,5 @@ pyvenv.cfg
 .venv
 pip-selfcheck.json
 
+# PyCharm
+.idea
