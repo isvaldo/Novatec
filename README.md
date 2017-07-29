@@ -15,8 +15,7 @@ source ENV/bin/activate
 pip install -r requirements.txt
 ```
 
-#Start Server
+# Run
 ```
-python server.py
-xdg-open http://localhost:5000/
+ENV/bin/python server.py
 ```
