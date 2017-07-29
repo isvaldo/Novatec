@@ -1,4 +1,4 @@
-#!flask/bin/python
+#!ENV/bin/python
 import json
 from flask import Flask, jsonify
 from scrapy_novatec import ScrapyNovatec
